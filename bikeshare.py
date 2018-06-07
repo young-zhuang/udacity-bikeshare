@@ -6,6 +6,10 @@ CITY_DATA = { 'chicago': 'chicago.csv',
               'new york city': 'new_york_city.csv',
               'washington': 'washington.csv' }
 
+MONTHS = ['january', 'february', 'march', 'april', 'may', 'june']
+
+DAY = {'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'}
+
 def get_filters():
     """
     Asks user to specify a city, month, and day to analyze.
@@ -31,39 +35,43 @@ def get_filters():
 
     # TO DO: get user input for month (all, january, february, ... , june)
     month = input("Please enter a month from january through june or all for all months-->")
-    if month.lower() == 'january':
-        return '1'
-    elif month.lower() == 'february':
-        return '2'
-    elif month.lower() == 'march':
-        return '3'
-    elif month.lower() == 'april':
-        return '4'
-    elif month.lower() == 'may':
-        return '5'
-    elif month.lower() == 'june':
-        return '6'
-    else:
-        print('Please enter in a correct month.')
+    while month not in MONTHS:
+        if month.lower() == 'january':
+            return '1'
+        elif month.lower() == 'february':
+            return '2'
+        elif month.lower() == 'march':
+            return '3'
+        elif month.lower() == 'april':
+            return '4'
+        elif month.lower() == 'may':
+            return '5'
+        elif month.lower() == 'june':
+            return '6'
+        else:
+            print('Please enter in a correct month.')
+            break
 
     # TO DO: get user input for day of week (all, monday, tuesday, ... sunday)
     day = input("Please enter a day of the week -->")
-    if day.lower() == 'monday':
-        return 'monday'
-    elif day.lower() == 'tuesday':
-        return 'tuesday'
-    elif day.lower() == 'wednesday':
-        return 'wednesday'
-    elif day.lower() == 'thursday':
-        return 'thursday'
-    elif day.lower() == 'friday':
-        return 'friday'
-    elif day.lower() == 'saturday':
-        return 'saturday'
-    elif day.lower() == 'sunday':
-        return 'sunday'
-    else:
-        print('Please enter in a correct day of the week.')
+    while day not in DAY:
+        if day.lower() == 'monday':
+            return 'monday'
+        elif day.lower() == 'tuesday':
+            return 'tuesday'
+        elif day.lower() == 'wednesday':
+            return 'wednesday'
+        elif day.lower() == 'thursday':
+            return 'thursday'
+        elif day.lower() == 'friday':
+            return 'friday'
+        elif day.lower() == 'saturday':
+            return 'saturday'
+        elif day.lower() == 'sunday':
+            return 'sunday'
+        else:
+            print('Please enter in a correct day of the week.')
+        break
 
     print('-'*40)
     return city, month, day
@@ -139,7 +147,7 @@ def station_stats(df):
     print("The most common end station is: ",most_common_end_station)
 
     # TO DO: display most frequent combination of start station and end station trip
-    most_common_combo = df['Start Station', 'End Station'].mode().loc[0]
+    most_common_combo = df[['Start Station', 'End Station']].mode().loc[0]
     print("The most common combination of start station and end station trip is:  {}, {}".format(most_common_combo[0],most_common_combo[1]))
 
     print("\nThis took %s seconds." % (time.time() - start_time))
@@ -172,12 +180,17 @@ def user_stats(df):
 
     # TO DO: Display counts of user types
     user_types_count = df['User Type'].value_counts()
-    print("The count of user types is: ",user_types_counts)
+    print("The count of user types is: ",user_types_count)
 
     # TO DO: Display counts of gender
-    male_count = df.query('gender == "Male"').gender.count()
-    female_count = df.query('gender == "Female"').gender.count()
-    print("There are {} male users and {} female users.".format(male_count, female_count))
+    if city == 'chicago':
+        gender_counts = df['Gender'].value_counts()
+        print("This the count of genders: ",gender_counts)
+    elif city == 'new york city':
+        gender_counts = df['Gender'].value_counts()
+        print("This the count of genders: ",gender_counts)
+    else:
+        print("Washington does not have a gender column.")
 
     # TO DO: Display earliest, most recent, and most common year of birth
     
