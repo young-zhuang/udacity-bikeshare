@@ -10,6 +10,14 @@ MONTHS = ['january', 'february', 'march', 'april', 'may', 'june']
 
 DAY = {'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'}
 
+chicago = 'chicago.csv'
+new_york_city = 'new_york_city.csv'
+washington = 'washington.csv'
+
+city = input("Please enter in one of these cities as your inputs: chicago, new york city, or washington -->")
+month = input("Please enter a month from january through june or all for all months-->")
+day = input("Please enter a day of the week -->")
+
 def get_filters():
     """
     Asks user to specify a city, month, and day to analyze.
@@ -21,20 +29,20 @@ def get_filters():
     """
     print('Hello! Let\'s explore some US bikeshare data!')
     # TO DO: get user input for city (chicago, new york city, washington). HINT: Use a while loop to handle invalid inputs
-    city = input("Please enter in one of these cities as your inputs: chicago, new york city, or washington -->")
+
     while city.lower() not in ['chicago','new york city','washington']:
         if city.lower() == 'chicago':
-            return 'chicago.csv'
+            return 'chicago'
         elif city.lower() == 'new york city':
-            return 'new_york_city.csv'
+            return 'new_york_city'
         elif city.lower() == 'washington':
-            return 'washington.csv'
+            return 'washington'
         else:
             print('Please try again! Input a city that is either chicago, new york city, or washington.')
             break    
 
     # TO DO: get user input for month (all, january, february, ... , june)
-    month = input("Please enter a month from january through june or all for all months-->")
+
     while month not in MONTHS:
         if month.lower() == 'january':
             return '1'
@@ -53,7 +61,7 @@ def get_filters():
             break
 
     # TO DO: get user input for day of week (all, monday, tuesday, ... sunday)
-    day = input("Please enter a day of the week -->")
+
     while day not in DAY:
         if day.lower() == 'monday':
             return 'monday'
@@ -75,7 +83,6 @@ def get_filters():
 
     print('-'*40)
     return city, month, day
-
 
 def load_data(city, month, day):
     """
@@ -147,8 +154,10 @@ def station_stats(df):
     print("The most common end station is: ",most_common_end_station)
 
     # TO DO: display most frequent combination of start station and end station trip
-    most_common_combo = df[['Start Station', 'End Station']].mode().loc[0]
-    print("The most common combination of start station and end station trip is:  {}, {}".format(most_common_combo[0],most_common_combo[1]))
+    #To create new column to find the most common combination
+    df['Trip Combo'] = df['Start Station'].str.cat(df['End Station'], sep=' to ')
+    most_common_combo = df['Trip Combo'].mode().to_string(index = False)
+    print('The most popular combination of start and end trip is {}.'.format(most_common_combo))
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
@@ -183,29 +192,44 @@ def user_stats(df):
     print("The count of user types is: ",user_types_count)
 
     # TO DO: Display counts of gender
-    if city == 'chicago':
+    if city == 'washington':
+        print("Washington does not have a gender column.")
+    elif city == 'chicago':
         gender_counts = df['Gender'].value_counts()
         print("This the count of genders: ",gender_counts)
     elif city == 'new york city':
         gender_counts = df['Gender'].value_counts()
         print("This the count of genders: ",gender_counts)
-    else:
-        print("Washington does not have a gender column.")
-
     # TO DO: Display earliest, most recent, and most common year of birth
     
     #Earliest birth year
-    earliest_birth_year = df['Birth Year'].min()
-    print("The earlist birth year is: ", earliest_birth_year)
-
+    if city == 'washington':
+        print("Washington does not have a birth year column.")
+    elif city == 'chicago':
+        earliest_birth_year = df['Birth Year'].min()
+        print("The earlist birth year is: ", earliest_birth_year)
+    elif city == 'new york city':
+        earliest_birth_year = df['Birth Year'].min()
+        print("The earlist birth year is: ", earliest_birth_year)
     #Most recent birth year                         
-    recent_birth_year = df['Birth Year'].max()
-    print("The most recent birth year is: ", recent_birth_year)
-               
+    if city == 'washington':
+        print("Washington does not have a birth year column.")
+    elif city == 'chicago':
+        recent_birth_year = df['Birth Year'].max()
+        print("The most recent birth year is: ", recent_birth_year)
+    elif city == 'new york city':
+        recent_birth_year = df['Birth Year'].max()
+        print("The most recent birth year is: ", recent_birth_year)              
     #Common birth year
-    most_common_birth_year = df['Birth Year'].mode()[0]
-    print("The most common birth year is: ",most_common_birth_year)                           
-                             
+    if city == 'washington':
+        print("Washington does not have a birth year column.")
+    elif city == 'chicago':
+        most_common_birth_year = df['Birth Year'].mode()[0]
+        print("The most common birth year is: ",most_common_birth_year)                           
+    elif city == 'new york city':
+        most_common_birth_year = df['Birth Year'].mode()[0]
+        print("The most common birth year is: ",most_common_birth_year)    
+        
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
 
