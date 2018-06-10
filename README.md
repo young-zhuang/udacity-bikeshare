@@ -1,4 +1,4 @@
-# udacity-bikeshare
+# udacity-bikeshare :bike:
 
 ## How to run:
 Use an IDE environment to run this code. If you don't have an IDE then please install it. Once installed, input in answers to the questions listed in the code to create the criteria for the output.
