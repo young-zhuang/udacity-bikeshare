@@ -2,88 +2,86 @@ import time
 import pandas as pd
 import numpy as np
 
-CITY_DATA = { 'chicago': 'chicago.csv',
-              'new york city': 'new_york_city.csv',
-              'washington': 'washington.csv' }
+CITY_DATA = { 'Chicago': 'chicago.csv',
+              'New York City': 'new_york_city.csv',
+              'Washington': 'washington.csv' }
 
-MONTHS = ['january', 'february', 'march', 'april', 'may', 'june']
+CITIES = ['Chicago', 'New York City', 'Washington']
 
-DAY = {'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'}
+MONTHS = ['January', 'February', 'March', 'April', 'May', 'June']
 
-chicago = 'chicago.csv'
-new_york_city = 'new_york_city.csv'
-washington = 'washington.csv'
+DAY = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
-city = input("Please enter in one of these cities as your inputs: chicago, new york city, or washington -->")
-month = input("Please enter a month from january through june or all for all months-->")
-day = input("Please enter a day of the week -->")
+Chicago = 'chicago.csv'
+New_York_City = 'new_york_city.csv'
+Washington = 'washington.csv'
 
 def get_filters():
     """
     Asks user to specify a city, month, and day to analyze.
-
     Returns:
         (str) city - name of the city to analyze
         (str) month - name of the month to filter by, or "all" to apply no month filter
         (str) day - name of the day of week to filter by, or "all" to apply no day filter
     """
     print('Hello! Let\'s explore some US bikeshare data!')
-    # TO DO: get user input for city (chicago, new york city, washington). HINT: Use a while loop to handle invalid inputs
 
-    while city.lower() not in ['chicago','new york city','washington']:
-        if city.lower() == 'chicago':
-            return 'chicago'
-        elif city.lower() == 'new york city':
-            return 'new_york_city'
-        elif city.lower() == 'washington':
-            return 'washington'
+    # get user input for city (chicago, new york city, washington). HINT: Use a while loop to handle invalid inputs
+    city = input("Please enter in one of these cities as your inputs: chicago, new york city, or washington -->").title()
+    while city not in CITIES:
+        if city == 'Chicago':
+            return 'chicago.csv'
+        elif city == 'New York City':
+            return 'new_york_city.csv'
+        elif city == 'Washington':
+            return 'washington.csv'
         else:
-            print('Please try again! Input a city that is either chicago, new york city, or washington.')
-            break    
-
-    # TO DO: get user input for month (all, january, february, ... , june)
-
+            print("\n'Please try again! Input a city that is either chicago, new york city, or washington.'")
+            return get_filters()
+            break
+    # get user input for month (all, january, february, ... , june)
+    month = input("Please enter a month from january through june or all for all months-->").title()
     while month not in MONTHS:
-        if month.lower() == 'january':
+        if month == 'January':
             return '1'
-        elif month.lower() == 'february':
+        elif month == 'February':
             return '2'
-        elif month.lower() == 'march':
+        elif month == 'March':
             return '3'
-        elif month.lower() == 'april':
+        elif month == 'April':
             return '4'
-        elif month.lower() == 'may':
+        elif month == 'May':
             return '5'
-        elif month.lower() == 'june':
+        elif month == 'June':
             return '6'
         else:
             print('Please enter in a correct month.')
+            return get_filters()
             break
-
-    # TO DO: get user input for day of week (all, monday, tuesday, ... sunday)
-
+    # get user input for day of week (all, monday, tuesday, ... sunday)
+    day = input("Please enter a day of the week -->").title()
     while day not in DAY:
-        if day.lower() == 'monday':
-            return 'monday'
-        elif day.lower() == 'tuesday':
-            return 'tuesday'
-        elif day.lower() == 'wednesday':
-            return 'wednesday'
-        elif day.lower() == 'thursday':
-            return 'thursday'
-        elif day.lower() == 'friday':
-            return 'friday'
-        elif day.lower() == 'saturday':
-            return 'saturday'
-        elif day.lower() == 'sunday':
-            return 'sunday'
+        if day.lower() == 'Monday':
+            return 'Monday'
+        elif day.lower() == 'Tuesday':
+            return 'Tuesday'
+        elif day.lower() == 'Wednesday':
+            return 'Wednesday'
+        elif day.lower() == 'Thursday':
+            return 'Thursday'
+        elif day.lower() == 'Friday':
+            return 'Friday'
+        elif day.lower() == 'Saturday':
+            return 'Saturday'
+        elif day.lower() == 'Sunday':
+            return 'Sunday'
         else:
             print('Please enter in a correct day of the week.')
-        break
-
+            return get_filters()
+            break
+        
     print('-'*40)
     return city, month, day
-
 def load_data(city, month, day):
     """
     Loads data for the specified city and filters by month and day if applicable.
@@ -192,47 +190,41 @@ def user_stats(df):
     print("The count of user types is: ",user_types_count)
 
     # TO DO: Display counts of gender
-    if city == 'washington':
-        print("Washington does not have a gender column.")
-    elif city == 'chicago':
+    if 'Gender' in df.columns:
         gender_counts = df['Gender'].value_counts()
-        print("This the count of genders: ",gender_counts)
-    elif city == 'new york city':
-        gender_counts = df['Gender'].value_counts()
-        print("This the count of genders: ",gender_counts)
-    # TO DO: Display earliest, most recent, and most common year of birth
-    
+        print("This is the count of genders: ", gender_counts)
+
     #Earliest birth year
-    if city == 'washington':
-        print("Washington does not have a birth year column.")
-    elif city == 'chicago':
+    if 'Birth Year' in df.columns:
         earliest_birth_year = df['Birth Year'].min()
         print("The earlist birth year is: ", earliest_birth_year)
-    elif city == 'new york city':
-        earliest_birth_year = df['Birth Year'].min()
-        print("The earlist birth year is: ", earliest_birth_year)
-    #Most recent birth year                         
-    if city == 'washington':
-        print("Washington does not have a birth year column.")
-    elif city == 'chicago':
+
+    #Most recent birth year
+    if 'Birth Year' in df.columns:
         recent_birth_year = df['Birth Year'].max()
-        print("The most recent birth year is: ", recent_birth_year)
-    elif city == 'new york city':
-        recent_birth_year = df['Birth Year'].max()
-        print("The most recent birth year is: ", recent_birth_year)              
+        print("The most recent birth year is: ", recent_birth_year)            
     #Common birth year
-    if city == 'washington':
-        print("Washington does not have a birth year column.")
-    elif city == 'chicago':
-        most_common_birth_year = df['Birth Year'].mode()[0]
-        print("The most common birth year is: ",most_common_birth_year)                           
-    elif city == 'new york city':
+    if 'Birth Year' in df.columns:
         most_common_birth_year = df['Birth Year'].mode()[0]
         print("The most common birth year is: ",most_common_birth_year)    
         
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
 
+def display_data(df):
+    line = 0
+    display = input('Please type yes or no to see more data -->')
+    display = display.lower()
+    if display == 'yes':
+        print(df.iloc[line:line+5])
+        line += 5
+        return display_data(df)
+    if display == 'no':
+        return
+    else:
+        print('Would you like to see more data?')
+        return display_data(df)
+    
 
 def main():
     while True:
@@ -244,6 +236,8 @@ def main():
         trip_duration_stats(df)
         user_stats(df)
 
+        display_data(df)
+        
         restart = input('\nWould you like to restart? Enter yes or no.\n')
         if restart.lower() != 'yes':
             break
